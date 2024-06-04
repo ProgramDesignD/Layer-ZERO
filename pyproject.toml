@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "layer-zero"
+version = "0.1.0"
+description = ""
+authors = ["Maruo.S <raspi-maru2004@outlook.jp>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Panda3D = "^1.10.14"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
