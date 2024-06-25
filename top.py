@@ -4,7 +4,7 @@ from direct.gui.DirectGui import *
 from panda3d.core import TextNode
 
 class TopMenu(DirectFrame):
-    def __init__(self, on_start, parent=None, **kw):
+    def __init__(self, on_start, on_deck, parent=None, **kw):
         super().__init__(parent, **kw)
         self.title = OnscreenText(
             parent=self,
@@ -23,8 +23,8 @@ class TopMenu(DirectFrame):
             parent= self,
             text= "Deck",
             scale= 0.1,
-            pos= (0,0,-0.8)
-        )
+            pos= (0,0,-0.8),
+            command=on_deck)
         self.icon_button = DirectButton(
             parent=self,
             text="Icon",
