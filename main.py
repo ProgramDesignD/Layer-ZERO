@@ -6,13 +6,19 @@ from top import TopMenu
 class ZeroLayer(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
-        self.topmenu=TopMenu(on_start=self.show_room_menu)
-        self.roommenu=RoomMenu()
-        self.roommenu.hide()
-    def show_room_menu(self):
-        self.topmenu.hide()
-        self.roommenu.show()
-        
+        self.scenes={
+            "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu")),
+            "roommenu": RoomMenu(parent=self.aspect2d, on_leave=lambda: self.changeScene("topmenu")),
+        }
+        self.changeScene("topmenu")
+    def changeScene(self, scene:str):
+        if scene not in self.scenes:
+            raise ValueError("Invalid Scene name")
+        for sname, s in self.scenes.items():
+            if sname == scene:
+                s.show()
+            else:
+                s.hide()
 
 app = ZeroLayer()
 app.run()
