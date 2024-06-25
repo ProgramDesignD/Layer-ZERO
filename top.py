@@ -19,6 +19,12 @@ class TopMenu(DirectFrame):
             scale=.1,
             pos=(0, 0, -0.5),
             command=on_start)
+        self.deck_botton= DirectButton(
+            parent= self,
+            text= "Deck",
+            scale= 0.1,
+            pos= (0,0,-0.8)
+        )
         self.icon_button = DirectButton(
             parent=self,
             text="Icon",
