@@ -6,3 +6,15 @@ class GameServerRepository(ServerRepository):
         tcpPort = ConfigVariableInt('server-port', 4400).getValue()
         dcFileNames = ['model.dc']
         ServerRepository.__init__(self, tcpPort, dcFileNames=dcFileNames, threadedNet=True)
+
+# all imports needed by the engine itself
+from direct.showbase.ShowBase import ShowBase
+
+# initialize the engine
+base = ShowBase(windowType='none')
+
+# instantiate the server
+GameServerRepository()
+
+# start the server
+base.run()

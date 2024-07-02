@@ -3,12 +3,10 @@ from direct.showbase.ShowBase import ShowBase
 from roommenu import RoomMenu
 from top import TopMenu
 from deckmenu import DeckMenu
-from server import GameServerRepository
 from makedeck import MakeDeck
 class ZeroLayer(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
-        self.serverRepo=GameServerRepository()
         self.scenes={
             "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu"), 
                                                      on_deck= lambda: self.changeScene("deckmenu")),
