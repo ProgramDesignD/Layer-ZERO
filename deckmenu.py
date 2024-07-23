@@ -1,7 +1,8 @@
 from direct.gui.DirectGui import *
+from makedeck import MakeDeck
 
 class DeckMenu(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, on_make_deck=None, **kw):
+    def __init__(self, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
         self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(parent=self,
@@ -15,29 +16,35 @@ class DeckMenu(DirectFrame):
                                              text_font= self.font,
                                              scale= 0.1,
                                              pos= (-0.8,1,0.4),
-                                             command= lambda: on_make_deck("jikkohan"))
+                                             command= lambda: self.on_make_deck("jikkohan"))
         self.kyohan_deck_btn= DirectButton(parent= self,
                                            text="共犯",
                                            text_font= self.font,
                                            scale= 0.1,
                                            pos= (0,1,0.4),
-                                           command= lambda: on_make_deck("kyohan"))
+                                           command= lambda: self.on_make_deck("kyohan"))
         self.naitusha_deck_btn= DirectButton(parent= self,
                                            text="内通者",
                                            text_font= self.font,
                                            scale= 0.1,
                                            pos= (0.8,1,0.4),
-                                           command= lambda: on_make_deck("naitusha"))
+                                           command= lambda: self.on_make_deck("naitusha"))
 
         self.kebin_deck_btn= DirectButton(parent= self,
                                            text="警備員",
                                            text_font= self.font,
                                            scale= 0.1,
                                            pos= (-0.4,1,-0.4),
-                                           command= lambda: on_make_deck("kebin"))
+                                           command= lambda: self.on_make_deck("kebin"))
         self.shain_deck_btn= DirectButton(parent= self,
-                                           text="社員",
-                                           text_font= self.font,
-                                           scale= 0.1,
-                                           pos= (0.4,1,-0.4),
-                                           command= lambda: on_make_deck("shain"))
+                                            text="社員",
+                                            text_font= self.font,
+                                            scale= 0.1,
+                                            pos= (0.4,1,-0.4),
+                                            command= lambda: self.on_make_deck("shain"))
+    def on_make_deck(self, role):
+        self.hide()
+        self.makedeck=MakeDeck(parent=self.parent ,role=role, on_leave=self.on_make_deck_leave)
+    def on_make_deck_leave(self):
+        self.makedeck.hide()
+        self.show()
