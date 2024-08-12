@@ -1,4 +1,3 @@
-from click import command
 from direct.gui.DirectGui import *
 from panda3d.core import TextNode
 
