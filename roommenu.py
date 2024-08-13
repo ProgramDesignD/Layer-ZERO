@@ -1,7 +1,7 @@
 from direct.gui.DirectGui import *
 
 class RoomMenu(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, on_create_room=None, **kw):
+    def __init__(self, parent=None, on_leave=None, on_create_room=None, on_select_room=None, **kw):
         super().__init__(parent, **kw)
         self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(parent=self,
@@ -20,4 +20,5 @@ class RoomMenu(DirectFrame):
                                           text="ルームに入る",
                                           text_font=self.font,
                                           scale=.2,
-                                          pos=(0, 0, -0.5))
+                                          pos=(0, 0, -0.5),
+                                          command=on_select_room)

@@ -7,7 +7,7 @@ from roomwait import RoomWait
 class CreateRoom(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf')
+        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",

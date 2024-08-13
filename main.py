@@ -1,6 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
 
 from roommenu import RoomMenu
+from roomselect import RoomSelect
 from top import TopMenu
 from deckmenu import DeckMenu
 from createroom import CreateRoom
@@ -12,9 +13,11 @@ class ZeroLayer(ShowBase):
             "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu"), 
                                                      on_deck= lambda: self.changeScene("deckmenu")),
             "roommenu": RoomMenu(parent=self.aspect2d, on_leave=lambda: self.changeScene("topmenu"),
-                                                       on_create_room=lambda: self.changeScene("createroom")),
+                                                       on_create_room=lambda: self.changeScene("createroom"),
+                                                       on_select_room=lambda: self.changeScene("roomselect")),
             "createroom": CreateRoom(parent=self.aspect2d, on_leave=lambda: self.changeScene("roommenu")),
             "deckmenu": DeckMenu(parent=self.aspect2d, on_leave=lambda: self.changeScene("topmenu")),
+            "roomselect":RoomSelect(parent=self.aspect2d, on_leave=lambda: self.changeScene("roommenu")),
         }
         self.changeScene("topmenu")
     def changeScene(self, scene:str):
