@@ -3,7 +3,6 @@ from direct.showbase.ShowBase import ShowBase
 from roommenu import RoomMenu
 from top import TopMenu
 from deckmenu import DeckMenu
-from makedeck import MakeDeck
 from createroom import CreateRoom
 
 class ZeroLayer(ShowBase):

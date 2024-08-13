@@ -2,6 +2,8 @@ from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import TextNode
 
+from roomwait import RoomWait
+
 class CreateRoom(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
@@ -120,5 +122,11 @@ class CreateRoom(DirectFrame):
             text_font=self.font,
             scale=.1,
             pos=(0, 0, -0.7),
-            # command=confirm
+            command=self.on_make_room
         )
+    def on_make_room(self):
+        self.hide()
+        self.roomwait=RoomWait(parent=self.parent, on_leave=self.on_make_room_leave)
+    def on_make_room_leave(self):
+        self.roomwait.hide()
+        self.show()
