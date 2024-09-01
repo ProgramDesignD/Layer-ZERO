@@ -1,7 +1,11 @@
+from mimetypes import inited
 from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectGui import *
 from panda3d.core import TextNode
 import json
+import warnings
+
+warnings.simplefilter('ignore')
 
 role_list= {"jikkohan", "kyohan", "naitusha", "kebin", "shain"}
 kyotu_name_list= ["移動", "聞き込み"]
@@ -35,10 +39,15 @@ for i in role_list: #each role's
     any={}
     decks[i]= [kyotu, koyu, item]
 
-with open('tmp.json', 'wt') as f:
+with open('deck.json', encoding='utf-8') as file:
+    try:
+        d = json.load(file)
+    except:
+        with open('deck.json', 'wt', encoding='utf-8') as f:
+            json.dump(decks, f, indent=2, ensure_ascii=False)
 
-    json.dump(decks, f, indent=2)
-
+with open('deck.json',encoding='utf-8') as f:
+    d_update = json.load(f)
 
 
 
@@ -48,50 +57,55 @@ class MakeDeck(DirectFrame):
 
         self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
 
-        def effect_card_sum(arg):
-            corrent_card_sum=0
+        # def effect_card_sum(arg):
+        #     corrent_card_sum=0
+        #     for i in range(len(arg)):
+        #         if(arg[i] >= str(0) and arg[i] <= str(9)):
+        #             corrent_card_sum = corrent_card_sum+int(arg[i:])
+        #             textObject.setText(str(corrent_card_sum))
+
+        def change_contents(arg, action_kind):
+            card_sum={}
+            card_contents=""
             for i in range(len(arg)):
                 if(arg[i] >= str(0) and arg[i] <= str(9)):
-                    corrent_card_sum = corrent_card_sum+int(arg[i:])
-                    textObject.setText(str(corrent_card_sum))
+                    card_sum= int(arg[i:])
+                    break
+                else:
+                    card_contents= card_contents+arg[i]
+            with open('deck.json') as f:
+                deck_update = json.load(f)
+                deck_update[role][action_kind][card_contents]= card_sum
+            with open('deck.json', 'wt', encoding='utf-8') as x:
+                json.dump(deck_update, x, indent=2, ensure_ascii=False)
 
-# カード枚数の増加減少
-        def inc():
-            global any_cards
-            any_cards_max = 40
-            if self.any_cards >= any_cards_max:
-                return
-            self.any_cards = self.any_cards+1
-            self.number.setText(str(self.any_cards))
-        def dec():
-            global any_cards
-            any_cards_min = 0
-            if self.any_cards <= any_cards_min:
-                return
-            self.any_cards = self.any_cards-1
-            self.number.setText(str(self.any_cards))
+
 
 # 各アクション種別ごとの中身
+        # すでにデッキ作成済みの場合、その枚数を読み込む
+        with open("deck.json") as f:
+            corrent_deck= json.load(f)
+
         j=0
         contents=[]
         kyotulist= []
         for i in kyotu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            kyotulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1,text="option",command=effect_card_sum,
-                                                highlightColor=(0.65, 0.65, 0.65, 1)))
+            kyotulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 0),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][0].get(i)))
             contents=[]
 
 
-        koyu_name_list= all_koyu_name_list[role]  # ロールを認識させて固有アクションを選択する
+        koyu_name_list= all_koyu_name_list[role]  # ロールを認識させて固有アクションを選ぶ
         j=0
         contents=[]
         koyulist= []
         for i in koyu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            koyulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1,text="option",command=effect_card_sum,
-                                                highlightColor=(0.65, 0.65, 0.65, 1)))
+            koyulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 1),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][1].get(i)))
             contents=[]
         
         
@@ -101,9 +115,10 @@ class MakeDeck(DirectFrame):
         for i in item_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            itemlist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1,text="option",command=effect_card_sum,
-                                                highlightColor=(0.65, 0.65, 0.65, 1)))
+            itemlist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][2].get(i)))
             contents=[]
+            print(corrent_deck[role])
 
 
 
@@ -115,12 +130,12 @@ class MakeDeck(DirectFrame):
                                         scale=.1,
                                         pos=(-1.0, 0, 0.85),
                                         command=on_leave)
-        self.detamin= DirectButton(parent= self,
-                                    text= "決定",
-                                    text_font= self.font,
-                                    scale= 0.1,
-                                    pos= (1, 0, 0.85),
-                                    command=on_leave)
+        # self.detamin= DirectButton(parent= self,
+        #                             text= "決定",
+        #                             text_font= self.font,
+        #                             scale= 0.1,
+        #                             pos= (1, 0, 0.85),
+        #                             command=on_leave)
         
         
 
@@ -142,7 +157,7 @@ class MakeDeck(DirectFrame):
 
                                                 frameSize=(0.0, 0.7, -0.05, 0.59),
                                                 frameColor=(0,0,1,0.5),
-                                                pos=(-1.2, 0, 0),
+                                                pos=(-1.2, 0, 0.2),
                                                 items=kyotulist,
                                                 numItemsVisible=numItemsVisible,
                                                 forceHeight=itemHeight,
@@ -163,7 +178,7 @@ class MakeDeck(DirectFrame):
 
                                             frameSize=(0.0, 0.7, -0.05, 0.59),
                                             frameColor=(1,0,0,0.5),
-                                            pos=(-0.35, 0, 0),
+                                            pos=(-0.35, 0, -0.7),
                                             items=koyulist,
                                             numItemsVisible=numItemsVisible,
                                             forceHeight=itemHeight,
@@ -186,15 +201,15 @@ class MakeDeck(DirectFrame):
 
                                     frameSize=(0.0, 0.7, -0.05, 0.59),
                                     frameColor=(0,1,0,0.5),
-                                    pos=(0.5, 0, 0),
+                                    pos=(0.5, 0, 0.2),
                                     items=itemlist,
                                     numItemsVisible=numItemsVisible,
                                     forceHeight=itemHeight,
                                     itemFrame_frameSize=(-0.3, 0.3, -0.37, 0.11),
                                     itemFrame_pos=(0.35, 0, 0.4))
 
-        # Add some text
-        output = ""
-        textObject = OnscreenText(text=output, pos=(0.95, -0.95), scale=0.07,
-                                fg=(1, 0.5, 0.5, 1), align=TextNode.ACenter,
-                                mayChange=1)
+        # 選択したやつの枚数を表示
+        # output = ""
+        # textObject = OnscreenText(text=output, pos=(0.95, -0.95), scale=0.07,
+        #                         fg=(1, 0.5, 0.5, 1), align=TextNode.ACenter,
+        #                         mayChange=1)
