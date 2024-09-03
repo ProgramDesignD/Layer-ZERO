@@ -14,10 +14,7 @@ item_name_list= ["けむりだま", "ドローン", "透明マント", "はし�
 class CardChoice(DirectFrame):
     def __init__(self, role:str, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
-
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
-
-# カード枚数の増加減少
+        # カード枚数の増加減少
         def inc():
             global any_cards
             any_cards_max = 40
@@ -37,7 +34,7 @@ class CardChoice(DirectFrame):
         j=0
         kyotulist= []
         for i in kyotu_name_list:
-            kyotulist.append(DirectButton(parent=self,text_font= self.font, text=(i, "click!", "roll", "disabled"),
+            kyotulist.append(DirectButton(parent=self, text=(i, "click!", "roll", "disabled"),
                                         text_scale=0.1, borderWidth=(0.01, 0.01),command=inc,
                                         relief=2))
             # self.btn_inc = DirectButton(
@@ -59,7 +56,7 @@ class CardChoice(DirectFrame):
         j=0
         koyulist= []
         for i in koyu_name_list:
-            koyulist.append(DirectButton(parent=self,text_font= self.font, text=(i, "click!", "roll", "disabled"),
+            koyulist.append(DirectButton(parent=self, text=(i, "click!", "roll", "disabled"),
                                         text_scale=0.1, borderWidth=(0.01, 0.01),command=inc,
                                         relief=2))
             j=j+1
@@ -67,20 +64,18 @@ class CardChoice(DirectFrame):
         j=0
         itemlist= []
         for i in item_name_list:
-            itemlist.append(DirectButton(parent=self,text_font= self.font, text=(i, "click!", "roll", "disabled"),
+            itemlist.append(DirectButton(parent=self, text=(i, "click!", "roll", "disabled"),
                                         text_scale=0.1, borderWidth=(0.01, 0.01),command=inc,
                                         relief=2))
             j=j+1
 
         self.leave_btn = DirectButton(parent=self,
                                         text="戻る",
-                                        text_font=self.font,
                                         scale=.1,
                                         pos=(-1.0, 0, 0.85),
                                         command=on_leave)
         self.detamin= DirectButton(parent= self,
                                     text= "決定",
-                                    text_font= self.font,
                                     scale= 0.1,
                                     pos= (1, 0, 0.85),
                                     command=on_leave)
@@ -91,8 +86,6 @@ class CardChoice(DirectFrame):
         numItemsVisible = 4
         itemHeight = 0.11
         self.kyotu_action = DirectScrolledList(parent= self,
-                                                text_font= self.font,
-            
                                                 decButton_pos=(0.35, 0, 0.53),
                                                 decButton_text="Dec",
                                                 decButton_text_scale=0.04,
@@ -114,7 +107,7 @@ class CardChoice(DirectFrame):
 
 
         self.koyu_action = DirectScrolledList(parent= self,
-                                            text_font= self.font,decButton_pos=(0.35, 0, 0.53),
+                                            decButton_pos=(0.35, 0, 0.53),
                                             decButton_text="Dec",
                                             decButton_text_scale=0.04,
                                             decButton_borderWidth=(0.005, 0.005),
@@ -136,7 +129,6 @@ class CardChoice(DirectFrame):
 
 
         self.item = DirectScrolledList(parent= self,
-                                    text_font= self.font,
                                     decButton_pos=(0.35, 0, 0.53),
                                     decButton_text="Dec",
                                     decButton_text_scale=0.04,
@@ -166,7 +158,6 @@ class CardChoice(DirectFrame):
             pos=(-0.05, -0.8),
             scale=0.08,
             fg=(1, 0.5, 0.5, 1),
-            font=self.font,
             align=TextNode.ARight,
             mayChange=1
         )

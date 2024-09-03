@@ -1,5 +1,4 @@
 from direct.gui.DirectGui import *
-from direct.gui.OnscreenText import OnscreenText
 
 class RoomWaitItem(DirectFrame):
     def __init__(self, text, parent=None, **kw):
@@ -12,11 +11,9 @@ class RoomWaitItem(DirectFrame):
 class RoomWait(DirectFrame):
     def __init__(self, parent=None, on_leave=None, on_submit=None, items=[], **kw):
         super().__init__(parent, **kw)
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
-            text_font=self.font,
             scale=.1,
             pos=(-1.0, 0, -0.8),
             command=on_leave
@@ -29,21 +26,18 @@ class RoomWait(DirectFrame):
         self.room_label = DirectLabel(
             parent=self.room_label_frame,
             text="ルーム",
-            text_font=self.font,
             scale=.1,
             pos=(0.2, 0, 0.1),
         )
         self.room_num_label = DirectLabel(
             parent=self.room_label_frame,
             text="5444",
-            text_font=self.font,
             scale=.2,
             pos=(0.5, 0, -0.1),
         )
         self.submit_btn = DirectButton(
             parent=self,
             text="決定",
-            text_font=self.font,
             scale=.1,
             pos=(1.0, 0, -0.8),
             command=on_submit

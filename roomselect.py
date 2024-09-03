@@ -1,6 +1,4 @@
-from turtle import width
 from direct.gui.DirectGui import *
-from direct.gui.OnscreenText import OnscreenText
 
 from roomwait import RoomWait
 
@@ -14,11 +12,9 @@ class RoomSelectItem(DirectFrame):
 class RoomSelect(DirectFrame):
     def __init__(self, parent=None, on_leave=None, items=[], **kw):
         super().__init__(parent, **kw)
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
-            text_font=self.font,
             scale=.1,
             pos=(-1.0, 0, -0.8),
             command=on_leave
@@ -33,7 +29,6 @@ class RoomSelect(DirectFrame):
         self.submit_btn = DirectButton(
             parent=self,
             text="決定",
-            text_font=self.font,
             scale=.1,
             pos=(1.0, 0, -0.8),
             command=lambda: self.on_select_room(self.room_input.get(plain=True))

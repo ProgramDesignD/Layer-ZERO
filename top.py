@@ -25,8 +25,3 @@ class TopMenu(DirectFrame):
             scale= 0.1,
             pos= (0,0,-0.8),
             command=on_deck)
-        self.icon_button = DirectButton(
-            parent=self,
-            text="Icon",
-            scale=.1,
-            pos=(1.0, 0, 0.8))

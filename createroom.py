@@ -7,11 +7,9 @@ from roomwait import RoomWait
 class CreateRoom(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
-            text_font=self.font,
             scale=.1,
             pos=(-1.0, 0, 0.7),
             command=on_leave
@@ -23,7 +21,6 @@ class CreateRoom(DirectFrame):
             pos=(-0.05, 0.5),
             scale=0.08,
             fg=(1, 0.5, 0.5, 1),
-            font=self.font,
             align=TextNode.ARight,
             mayChange=1
         )
@@ -97,7 +94,6 @@ class CreateRoom(DirectFrame):
             DirectRadioButton(
                 parent=self,
                 text='公開',
-                text_font=self.font,
                 variable=self.v,
                 value=[0],
                 scale=0.1,
@@ -106,7 +102,6 @@ class CreateRoom(DirectFrame):
             DirectRadioButton(
                 parent=self,
                 text='非公開',
-                text_font=self.font,
                 variable=self.v,
                 value=[1],
                 scale=0.1,
@@ -119,7 +114,6 @@ class CreateRoom(DirectFrame):
         self.confirm_btn = DirectButton(
             parent=self,
             text="決定",
-            text_font=self.font,
             scale=.1,
             pos=(0, 0, -0.7),
             command=self.on_make_room

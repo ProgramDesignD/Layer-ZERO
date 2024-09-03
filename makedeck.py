@@ -1,7 +1,4 @@
-from mimetypes import inited
-from direct.gui.OnscreenText import OnscreenText
 from direct.gui.DirectGui import *
-from panda3d.core import TextNode
 import json
 import warnings
 
@@ -55,8 +52,6 @@ class MakeDeck(DirectFrame):
     def __init__(self, role:str, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
 
-        self.font = loader.loadFont('./fonts/Genjyuu.ttf') # type: ignore
-
         # def effect_card_sum(arg):
         #     corrent_card_sum=0
         #     for i in range(len(arg)):
@@ -92,7 +87,7 @@ class MakeDeck(DirectFrame):
         for i in kyotu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            kyotulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 0),
+            kyotulist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 0),
                                                 highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][0].get(i)))
             contents=[]
 
@@ -104,7 +99,7 @@ class MakeDeck(DirectFrame):
         for i in koyu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            koyulist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 1),
+            koyulist.append(DirectOptionMenu(parent=self,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 1),
                                                 highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][1].get(i)))
             contents=[]
         
@@ -115,7 +110,7 @@ class MakeDeck(DirectFrame):
         for i in item_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            itemlist.append(DirectOptionMenu(parent=self, text_font= self.font,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
+            itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
                                                 highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][2].get(i)))
             contents=[]
             print(corrent_deck[role])
@@ -126,7 +121,6 @@ class MakeDeck(DirectFrame):
 # デフォルト機能
         self.leave_btn = DirectButton(parent=self,
                                         text="戻る",
-                                        text_font=self.font,
                                         scale=.1,
                                         pos=(-1.0, 0, 0.85),
                                         command=on_leave)
@@ -142,9 +136,7 @@ class MakeDeck(DirectFrame):
 # 枠
         numItemsVisible = 4
         itemHeight = 0.11
-        self.kyotu_action = DirectScrolledList(parent= self,
-                                                text_font= self.font,
-            
+        self.kyotu_action = DirectScrolledList(parent= self,            
                                                 decButton_pos=(0.35, 0, 0.53),
                                                 decButton_text="Dec",
                                                 decButton_text_scale=0.04,
@@ -166,7 +158,7 @@ class MakeDeck(DirectFrame):
 
 
         self.koyu_action = DirectScrolledList(parent= self,
-                                            text_font= self.font,decButton_pos=(0.35, 0, 0.53),
+                                            decButton_pos=(0.35, 0, 0.53),
                                             decButton_text="Dec",
                                             decButton_text_scale=0.04,
                                             decButton_borderWidth=(0.005, 0.005),
@@ -188,7 +180,6 @@ class MakeDeck(DirectFrame):
 
 
         self.item = DirectScrolledList(parent= self,
-                                    text_font= self.font,
                                     decButton_pos=(0.35, 0, 0.53),
                                     decButton_text="Dec",
                                     decButton_text_scale=0.04,
