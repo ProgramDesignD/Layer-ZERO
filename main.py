@@ -1,11 +1,12 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode
 
-from roommenu import RoomMenu
-from roomselect import RoomSelect
-from top import TopMenu
-from deckmenu import DeckMenu
-from createroom import CreateRoom
+from repos.client import GameClientRepository
+from pages.roommenu import RoomMenu
+from pages.roomselect import RoomSelect
+from pages.top import TopMenu
+from pages.deckmenu import DeckMenu
+from pages.createroom import CreateRoom
 
 class ZeroLayer(ShowBase):
     def __init__(self):

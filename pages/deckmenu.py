@@ -1,5 +1,5 @@
 from direct.gui.DirectGui import *
-from makedeck import MakeDeck
+from .makedeck import MakeDeck
 
 class DeckMenu(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):

@@ -2,7 +2,7 @@ from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import TextNode
 
-from roomwait import RoomWait
+from .roomwait import RoomWait
 
 class CreateRoom(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):

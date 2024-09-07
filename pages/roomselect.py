@@ -1,6 +1,6 @@
 from direct.gui.DirectGui import *
 
-from roomwait import RoomWait
+from .roomwait import RoomWait
 
 class RoomSelectItem(DirectFrame):
     def __init__(self, text, parent=None, on_submit=None, **kw):

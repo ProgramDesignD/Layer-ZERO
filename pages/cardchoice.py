@@ -2,6 +2,7 @@ from direct.showbase.ShowBase import ShowBase
 from direct.task import Task
 from direct.gui.DirectGui import *
 from panda3d.core import TextNode
+from direct.showbase import ShowBaseGlobal
 
 kyotu_name_list= ["移動", "聞き込み"]
 all_koyu_name_list= {"jikkohan":["盗む", "戦闘", "物理的破壊"],
@@ -186,7 +187,7 @@ class Countdown(ShowBase):
         self.text_node.setText(str(int(self.countdown_time)))
         self.text_node.setAlign(TextNode.ACenter)
         
-        text_node_path = aspect2d.attachNewNode(self.text_node)
+        text_node_path = ShowBaseGlobal.aspect2d.attachNewNode(self.text_node)
         text_node_path.setScale(0.2)
         text_node_path.setPos(-0.9, 1, 0.8)
 
@@ -195,7 +196,7 @@ class Countdown(ShowBase):
 
     def update_countdown(self, task):
         # 経過時間を計算
-        dt = globalClock.getDt()
+        dt = ShowBaseGlobal.globalClock.getDt()
         self.countdown_time -= dt
 
         # カウントダウンが0以下になったら終了
