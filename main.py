@@ -1,7 +1,8 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode
 
-# from repos.client import GameClientRepository
+from models.avatar import Avatar
+from repos.client import GameClientRepository
 from pages.roommenu import RoomMenu
 from pages.roomselect import RoomSelect
 from pages.top import TopMenu
@@ -24,6 +25,15 @@ class ZeroLayer(ShowBase):
             "roomselect":RoomSelect(parent=self.aspect2d, on_leave=lambda: self.changeScene("roommenu")),
         }
         self.changeScene("topmenu")
+        self.accept("escape", self.onEscape)
+        self.accept("client-joined", self.onJoin)
+        #self.map_bg=self.loader.loadModel("models/map_bg")
+    def onJoin(self):
+        print("join!")
+        Avatar(client, self)
+    def onEscape(self):
+        print("exit!")
+        self.userExit()
     def changeScene(self, scene:str):
         if scene not in self.scenes:
             raise ValueError("Invalid Scene name")
@@ -34,4 +44,5 @@ class ZeroLayer(ShowBase):
                 s.hide()
 
 app = ZeroLayer()
+client = GameClientRepository(base=app)
 app.run()
