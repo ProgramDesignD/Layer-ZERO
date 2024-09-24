@@ -1,7 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import TextNode
 
-from repos.client import GameClientRepository
+# from repos.client import GameClientRepository
 from pages.roommenu import RoomMenu
 from pages.roomselect import RoomSelect
 from pages.top import TopMenu
