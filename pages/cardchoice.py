@@ -112,7 +112,6 @@ class CardChoice(DirectFrame):
             itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
                                                 highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][2].get(i)))
             contents=[]
-            print(corrent_deck[role])
 
 
 
