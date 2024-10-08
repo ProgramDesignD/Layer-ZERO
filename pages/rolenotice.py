@@ -41,21 +41,10 @@ class RoleNotice(DirectFrame):
             align=TextNode.ARight,
             mayChange=1
         )
-
-        def tickTask(task):
-            self.on_determinate(self.role_num)
-            return task.done
     
-        ShowBaseGlobal.base.taskMgr.doMethodLater(2, tickTask, 'tickTask')
+        ShowBaseGlobal.base.taskMgr.doMethodLater(2, self.on_determinate_task, 'tickTask')
 
-
-
-        # 一旦決定ボタンで遷移
-        self.determinate_btn = DirectButton(parent=self,
-                                      text="決定",
-                                      scale=.1,
-                                      pos=(-1.0, 0, 0.7),
-                                      command= lambda: self.on_determinate(self.role_num))
-    def on_determinate(self, role_num):
+    def on_determinate_task(self, task):
         self.hide()
-        self.makedeck=CardChoice(parent=self.parent ,role_num=role_num)
+        self.makedeck=CardChoice(parent=self.parent ,role_num=self.role_num)
+        return task.done
