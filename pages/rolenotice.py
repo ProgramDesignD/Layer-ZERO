@@ -2,9 +2,8 @@ from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from direct.task import Task
 from panda3d.core import TextNode
-try:from .cardchoice import CardChoice
-except: from cardchoice import CardChoice
-# from pages import cardchoice
+from .cardchoice import CardChoice
+from direct.showbase import ShowBaseGlobal
 
 class RoleNotice(DirectFrame):
     def __init__(self, parent=None, on_leave=None, **kw):
@@ -43,11 +42,11 @@ class RoleNotice(DirectFrame):
             mayChange=1
         )
 
-    # def myFunction(task):
-    #     print('auto change!')
-    #     return Task.done
+        def tickTask(task):
+            self.on_determinate(self.role_num)
+            return task.done
     
-    # myTask = Task.TaskManager.doMethodLater(self, 2, myFunction, 'tickTask')
+        ShowBaseGlobal.base.taskMgr.doMethodLater(2, tickTask, 'tickTask')
 
 
 
@@ -60,9 +59,3 @@ class RoleNotice(DirectFrame):
     def on_determinate(self, role_num):
         self.hide()
         self.makedeck=CardChoice(parent=self.parent ,role_num=role_num)
-
-if __name__ == "__main__":
-    from direct.showbase.ShowBase import ShowBase
-    base=ShowBase()
-    RoleNotice()
-    base.run()

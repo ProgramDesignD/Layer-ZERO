@@ -5,7 +5,7 @@ from panda3d.core import TextNode
 from direct.showbase import ShowBaseGlobal
 import warnings
 import json
-from makedeck import role_list,kyotu_name_list,all_koyu_name_list,item_name_list
+from .makedeck import role_list,kyotu_name_list,all_koyu_name_list,item_name_list
 
 warnings.simplefilter('ignore')
 

@@ -1,5 +1,7 @@
 from direct.gui.DirectGui import *
 
+from pages.rolenotice import RoleNotice
+
 class RoomWaitItem(DirectFrame):
     def __init__(self, text, parent=None, **kw):
         super().__init__(parent, frameSize=(-1.0,1.0,-0.1,0.1),**kw)
@@ -9,7 +11,7 @@ class RoomWaitItem(DirectFrame):
 
 
 class RoomWait(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, on_submit=None, items=[], **kw):
+    def __init__(self, parent=None, on_leave=None, items=[], **kw):
         super().__init__(parent, **kw)
         self.leave_btn = DirectButton(
             parent=self,
@@ -40,7 +42,7 @@ class RoomWait(DirectFrame):
             text="決定",
             scale=.1,
             pos=(1.0, 0, -0.8),
-            command=on_submit
+            command=self.on_start
         )
         
         self.scroll_list=DirectScrolledList(
@@ -65,5 +67,8 @@ class RoomWait(DirectFrame):
         )
         if len(items)==0:
             for i in range(10):self.scroll_list.addItem(RoomWaitItem(str(i)))
+    def on_start(self):
+        self.hide()
+        self.role_notice=RoleNotice(parent=self.parent)
 
         

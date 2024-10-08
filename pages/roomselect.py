@@ -59,9 +59,7 @@ class RoomSelect(DirectFrame):
     def on_select_room(self, roomid):
         print(roomid)
         self.hide()
-        self.roomwait=RoomWait(parent=self.parent, on_leave=self.on_select_room_leave, on_submit=self.on_room_submit)
+        self.roomwait=RoomWait(parent=self.parent, on_leave=self.on_select_room_leave)
     def on_select_room_leave(self):
         self.roomwait.hide()
         self.show()
-    def on_room_submit(self):
-        self.roomwait.hide()
