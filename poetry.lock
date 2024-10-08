@@ -78,6 +78,60 @@ files = [
 ]
 
 [[package]]
+name = "panda3d-blend2bam"
+version = "0.25.0"
+description = "A tool to convert Blender blend files to Panda3D BAM files"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "panda3d-blend2bam-0.25.0.tar.gz", hash = "sha256:e52447664eaad157d5ccf4926a34bd4d2779214b381d482d3ae85958d94efdba"},
+    {file = "panda3d_blend2bam-0.25.0-py3-none-any.whl", hash = "sha256:adfb3d3ea097a831c9d73f7d0c4dfd7fb0a8e180d1dbab3f8dd31d51cb1b1796"},
+]
+
+[package.dependencies]
+panda3d = "*"
+panda3d-gltf = ">=1.1.0,<1.2.0"
+
+[package.extras]
+test = ["pylint (>=2.4.0,<2.5.0)", "pytest", "pytest-pylint"]
+
+[[package]]
+name = "panda3d-gltf"
+version = "1.1.0"
+description = "glTF utilities for Panda3D"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "panda3d-gltf-1.1.0.tar.gz", hash = "sha256:3d16e95ab27699a926ea9524a90735f799680660ebac624649644a225bfd4b40"},
+    {file = "panda3d_gltf-1.1.0-py3-none-any.whl", hash = "sha256:c351ee0e66236c4d639dc2c56bff3cff7c403f53958dc7780a8333b219f384e4"},
+]
+
+[package.dependencies]
+panda3d = ">=1.10.8"
+panda3d-simplepbr = ">=0.6"
+
+[package.extras]
+test = ["pylint (>=2.5.0,<2.6.0)", "pytest", "pytest-pylint"]
+
+[[package]]
+name = "panda3d-simplepbr"
+version = "0.12.0"
+description = "A straight-forward, easy-to-use, drop-in, PBR replacement for Panda3D's builtin auto shader"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "panda3d-simplepbr-0.12.0.tar.gz", hash = "sha256:c71d490afeeb3a90455dcfde1d30c41f321a38742a97d18834e5c31016331ed5"},
+    {file = "panda3d_simplepbr-0.12.0-py3-none-any.whl", hash = "sha256:6c43d1990ff07840cf1c557561d6122fd1250d8e76aacf227b61c3789149bcf9"},
+]
+
+[package.dependencies]
+panda3d = ">=1.10.8"
+typing-extensions = ">=4.7,<5.0"
+
+[package.extras]
+test = ["pylint (>=3.0.0,<3.1.0)", "pytest", "pytest-pylint"]
+
+[[package]]
 name = "types-panda3d"
 version = "0.4.1"
 description = "Type stubs for the Panda3D Python bindings"
@@ -88,7 +142,18 @@ files = [
     {file = "types_panda3d-0.4.1.tar.gz", hash = "sha256:21ae77958816a92ab89acfe2b5c18d45644958653d664290d94b6846169f770e"},
 ]
 
+[[package]]
+name = "typing-extensions"
+version = "4.12.2"
+description = "Backported and Experimental Type Hints for Python 3.8+"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
+    {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
+]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5aa03ef2e16739811f11b0554ec78de4c1a4042a1af6a30946cd07dd26a7fac5"
+content-hash = "916d8977fd71c7aa1570ee48d7aeb9491beb8ecfabbae85e751cfa519ff52be9"

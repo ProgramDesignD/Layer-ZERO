@@ -12,7 +12,7 @@ class Avatar:
     def __init__(self, cr:ClientRepository, base:ShowBase):
         self.cr = cr
         self.base=base
-        self.ralph = DistributedSmoothActor(self.cr)
+        self.ralph = DistributedSmoothActor(self.cr, "models/sphere.bam")
         self.cr.createDistributedObject(
             distObj = self.ralph,
             zoneId = 2)
@@ -95,12 +95,13 @@ class Avatar:
         camvec.setZ(0)
         camdist = camvec.length()
         camvec.normalize()
-        if camdist > 10.0:
-            self.base.camera.setPos(self.base.camera.getPos() + camvec * (camdist - 10))
-            camdist = 10.0
-        if camdist < 5.0:
-            self.base.camera.setPos(self.base.camera.getPos() - camvec * (5 - camdist))
-            camdist = 5.0
+        print("\r", camdist, end="")
+        # if camdist > 10.0:
+        #     self.base.camera.setPos(self.base.camera.getPos() + camvec * (camdist - 10))
+        #     camdist = 10.0
+        # if camdist < 5.0:
+        self.base.camera.setPos(self.base.camera.getPos() - camvec * camdist)
+        #camdist = 5.0
 
         # The camera should look in ralph's direction,
         # but it should also try to stay horizontal, so look at

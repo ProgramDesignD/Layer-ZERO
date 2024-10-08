@@ -30,7 +30,6 @@ class ZeroLayer(ShowBase):
         #self.map_bg=self.loader.loadModel("models/map_bg")
     def onJoin(self):
         print("join!")
-        Avatar(client, self)
     def onEscape(self):
         print("exit!")
         self.userExit()
