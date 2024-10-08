@@ -4,7 +4,7 @@ import warnings
 
 warnings.simplefilter('ignore')
 
-role_list= {"jikkohan", "kyohan", "naitusha", "kebin", "shain"}
+role_list= ["jikkohan", "kyohan", "naitusha", "kebin", "shain"]
 kyotu_name_list= ["移動", "聞き込み"]
 all_koyu_name_list= {"jikkohan":["盗む", "戦闘", "物理的破壊"],
                     "kyohan":["ハッキング(妨害)", "経路把握", "ピッキング"],
@@ -51,13 +51,6 @@ with open('deck.json',encoding='utf-8') as f:
 class MakeDeck(DirectFrame):
     def __init__(self, role:str, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
-
-        # def effect_card_sum(arg):
-        #     corrent_card_sum=0
-        #     for i in range(len(arg)):
-        #         if(arg[i] >= str(0) and arg[i] <= str(9)):
-        #             corrent_card_sum = corrent_card_sum+int(arg[i:])
-        #             textObject.setText(str(corrent_card_sum))
 
         def change_contents(arg, action_kind):
             card_sum={}
@@ -198,9 +191,3 @@ class MakeDeck(DirectFrame):
                                     forceHeight=itemHeight,
                                     itemFrame_frameSize=(-0.3, 0.3, -0.37, 0.11),
                                     itemFrame_pos=(0.35, 0, 0.4))
-
-        # 選択したやつの枚数を表示
-        # output = ""
-        # textObject = OnscreenText(text=output, pos=(0.95, -0.95), scale=0.07,
-        #                         fg=(1, 0.5, 0.5, 1), align=TextNode.ACenter,
-        #                         mayChange=1)
