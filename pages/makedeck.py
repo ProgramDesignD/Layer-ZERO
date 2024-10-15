@@ -13,28 +13,23 @@ all_koyu_name_list= {"jikkohan":["盗む", "戦闘", "物理的破壊"],
                     "shain":["通報", "警備機能の追加"]}
 item_name_list= ["けむりだま", "ドローン", "透明マント", "はしご"]
 
+# デッキの初期化
 decks={}
-
+temp=[]
 for i in role_list: #each role's
     kyotu={}
     koyu={}
     item={}
-    any={}
     for j in kyotu_name_list:
-        any[j]= 0
-    kyotu["kyotu"]= any
-    any={}
+        kyotu[j]= 0
 
     for j in all_koyu_name_list[i]:
-        any[j]= 0
-    koyu= {"koyu":any}
-    any={}
+        koyu[j]= 0
 
     for j in item_name_list:
-        any[j]= 0
-    item= {"item":any}
-    any={}
-    decks[i]= [kyotu, koyu, item]
+        item[j]= 0
+
+    decks[i]= {"kyotu":kyotu, "koyu":koyu, "item":item}
 
 with open('deck.json', encoding='utf-8') as file:
     try:
@@ -80,8 +75,8 @@ class MakeDeck(DirectFrame):
         for i in kyotu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            kyotulist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 0),
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][0].get(i)))
+            kyotulist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, "kyotu"),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["kyotu"][i]))
             contents=[]
 
 
@@ -92,8 +87,8 @@ class MakeDeck(DirectFrame):
         for i in koyu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            koyulist.append(DirectOptionMenu(parent=self,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 1),
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][1].get(i)))
+            koyulist.append(DirectOptionMenu(parent=self,items=contents, scale=0.1, command=lambda arg: change_contents(arg, "koyu"),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["koyu"][i]))
             contents=[]
         
         
@@ -103,8 +98,8 @@ class MakeDeck(DirectFrame):
         for i in item_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][2].get(i)))
+            itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, "item"), 
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["item"][i]))
             contents=[]
 
 
