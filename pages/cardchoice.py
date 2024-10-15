@@ -86,8 +86,8 @@ class CardChoice(DirectFrame):
         for i in kyotu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            kyotulist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 0),
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][0].get(i)))
+            kyotulist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, "kyotu"),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["kyotu"][i]))
             contents=[]
 
 
@@ -98,8 +98,8 @@ class CardChoice(DirectFrame):
         for i in koyu_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            koyulist.append(DirectOptionMenu(parent=self,items=contents, scale=0.1, command=lambda arg: change_contents(arg, 1),
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][1].get(i)))
+            koyulist.append(DirectOptionMenu(parent=self,items=contents, scale=0.1, command=lambda arg: change_contents(arg, "koyu"),
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["koyu"][i]))
             contents=[]
         
         
@@ -109,8 +109,8 @@ class CardChoice(DirectFrame):
         for i in item_name_list:
             for j in range(21):
                 contents.append(i+str(j))
-            itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, 2), 
-                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role][2].get(i)))
+            itemlist.append(DirectOptionMenu(parent=self, items=contents, scale=0.1, command=lambda arg: change_contents(arg, "item"), 
+                                                highlightColor=(0.65, 0.65, 0.65, 1), initialitem=corrent_deck[role]["item"][i]))
             contents=[]
 
 
