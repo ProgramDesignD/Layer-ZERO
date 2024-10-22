@@ -10,29 +10,23 @@ from .makedeck import role_list,kyotu_name_list,all_koyu_name_list,item_name_lis
 warnings.simplefilter('ignore')
 
 
-# init(初期化機能はないのでjsonファイルを空ファイルにすることで初期化)
+# デッキの初期化
 decks={}
-
+temp=[]
 for i in role_list: #each role's
     kyotu={}
     koyu={}
     item={}
-    any={}
     for j in kyotu_name_list:
-        any[j]= 0
-    kyotu["kyotu"]= any
-    any={}
+        kyotu[j]= 0
 
     for j in all_koyu_name_list[i]:
-        any[j]= 0
-    koyu= {"koyu":any}
-    any={}
+        koyu[j]= 0
 
     for j in item_name_list:
-        any[j]= 0
-    item= {"item":any}
-    any={}
-    decks[i]= [kyotu, koyu, item]
+        item[j]= 0
+
+    decks[i]= {"kyotu":kyotu, "koyu":koyu, "item":item}
 
 with open('deck.json', encoding='utf-8') as file:
     try:
@@ -49,12 +43,6 @@ with open('deck.json',encoding='utf-8') as f:
 class CardChoice(DirectFrame):
     def __init__(self, role_num:int, parent=None, **kw):
         super().__init__(parent, **kw)
-        # def effect_card_sum(arg):
-        #     corrent_card_sum=0
-        #     for i in range(len(arg)):
-        #         if(arg[i] >= str(0) and arg[i] <= str(9)):
-        #             corrent_card_sum = corrent_card_sum+int(arg[i:])
-        #             textObject.setText(str(corrent_card_sum))
 
         role= role_list[role_num]
 
