@@ -1,7 +1,7 @@
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import TextNode
+from panda3d.core import TextNode, PerspectiveLens
 
-from models.avatar import Avatar
+from models.player import Player
 from repos.client import GameClientRepository
 from pages.roommenu import RoomMenu
 from pages.roomselect import RoomSelect
@@ -13,6 +13,11 @@ class ZeroLayer(ShowBase):
     def __init__(self):
         ShowBase.__init__(self)
         self.font=self.loader.loadFont('./fonts/Genjyuu.ttf')
+        self.disableMouse()
+        self.scene = self.loader.loadModel("models/world.bam")
+        self.scene.reparentTo(self.render)
+        self.scene.setScale(1.5, 1.5, 1.5)
+        self.scene.setPos(1, 4.0, -1)
         TextNode.setDefaultFont(self.font)
         self.scenes={
             "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu"), 
@@ -27,9 +32,9 @@ class ZeroLayer(ShowBase):
         self.changeScene("topmenu")
         self.accept("escape", self.onEscape)
         self.accept("client-joined", self.onJoin)
-        #self.map_bg=self.loader.loadModel("models/map_bg")
     def onJoin(self):
         print("join!")
+        Player(client, self)
     def onEscape(self):
         print("exit!")
         self.userExit()
