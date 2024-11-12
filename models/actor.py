@@ -4,12 +4,13 @@ from panda3d.core import NodePath
 from direct.actor.Actor import Actor
 
 class DistributedSmoothActor(DistributedSmoothNode, Actor):
-    def __init__(self, cr, models=None, anims=None):
-        Actor.__init__(self, models, anims)
+    models=None
+    anims=None
+    def __init__(self, cr):
+        Actor.__init__(self, self.models, self.anims)
         DistributedSmoothNode.__init__(self, cr)
         self.setCacheable(1)
-        self.setScale(.2)
-
+        self.setScale(0.1)
     def generate(self):
         DistributedSmoothNode.generate(self)
         self.activateSmoothing(True, False)
