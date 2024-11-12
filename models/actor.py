@@ -1,5 +1,5 @@
 from direct.distributed.DistributedSmoothNode import DistributedSmoothNode
-from panda3d.core import NodePath
+from direct.showbase.ShowBaseGlobal import base
 
 from direct.actor.Actor import Actor
 
@@ -18,7 +18,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
 
     def announceGenerate(self):
         DistributedSmoothNode.announceGenerate(self)
-        self.reparentTo(render)
+        self.reparentTo(base.render)
 
     def disable(self):
         # remove all anims, on all parts and all lods
