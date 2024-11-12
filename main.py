@@ -32,9 +32,10 @@ class ZeroLayer(ShowBase):
         self.changeScene("topmenu")
         self.accept("escape", self.onEscape)
         self.accept("client-joined", self.onJoin)
+        self.cr=GameClientRepository(base=self)
     def onJoin(self):
         print("join!")
-        Player(client, self)
+        Player(self.cr, self)
     def onEscape(self):
         print("exit!")
         self.userExit()
@@ -48,5 +49,4 @@ class ZeroLayer(ShowBase):
                 s.hide()
 
 app = ZeroLayer()
-client = GameClientRepository(base=app)
 app.run()

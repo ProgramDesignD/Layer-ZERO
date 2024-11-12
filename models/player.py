@@ -18,8 +18,8 @@ class Player:
     def __init__(self, cr:ClientRepository, base:ShowBase):
         self.cr = cr
         self.base=base
-        DistributedSmoothActor.models="models/sphere.bam"
         self.ralph = DistributedSmoothActor(self.cr)
+        self.ralph.setModel("sphere.bam")
         self.cr.createDistributedObject(
             distObj = self.ralph,
             zoneId = 2)

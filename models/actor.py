@@ -1,16 +1,20 @@
 from direct.distributed.DistributedSmoothNode import DistributedSmoothNode
-from direct.showbase.ShowBaseGlobal import base
+from direct.showbase import ShowBaseGlobal
 
 from direct.actor.Actor import Actor
 
 class DistributedSmoothActor(DistributedSmoothNode, Actor):
-    models=None
-    anims=None
     def __init__(self, cr):
-        Actor.__init__(self, self.models, self.anims)
+        Actor.__init__(self)
         DistributedSmoothNode.__init__(self, cr)
         self.setCacheable(1)
         self.setScale(0.1)
+        self.ModelName=""
+    def setModel(self, modelName:str):
+        Actor.loadModel(self, "models/"+modelName)
+        self.ModelName=modelName
+    def getModel(self):
+        return self.ModelName
     def generate(self):
         DistributedSmoothNode.generate(self)
         self.activateSmoothing(True, False)
@@ -18,7 +22,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
 
     def announceGenerate(self):
         DistributedSmoothNode.announceGenerate(self)
-        self.reparentTo(base.render)
+        self.reparentTo(ShowBaseGlobal.base.render)
 
     def disable(self):
         # remove all anims, on all parts and all lods
