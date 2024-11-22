@@ -1,6 +1,7 @@
 from direct.gui.DirectGui import *
 
-from pages.rolenotice import RoleNotice
+from .rolenotice import RoleNotice
+from repos.room import Room
 
 class RoomWaitItem(DirectFrame):
     def __init__(self, text, parent=None, **kw):
@@ -11,8 +12,10 @@ class RoomWaitItem(DirectFrame):
 
 
 class RoomWait(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, items=[], **kw):
+    def __init__(self, room:Room, parent=None, on_leave=None, items=[], **kw):
         super().__init__(parent, **kw)
+        self.room=room
+        #self.room.joinPlayer()
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
@@ -33,7 +36,7 @@ class RoomWait(DirectFrame):
         )
         self.room_num_label = DirectLabel(
             parent=self.room_label_frame,
-            text="5444",
+            text=room.name,
             scale=.2,
             pos=(0.5, 0, -0.1),
         )
@@ -66,7 +69,7 @@ class RoomWait(DirectFrame):
             forceHeight=0.1
         )
         if len(items)==0:
-            for i in range(10):self.scroll_list.addItem(RoomWaitItem(str(i)))
+            for i in range(10):self.scroll_list.addItem(RoomWaitItem(str(i))) # type: ignore
     def on_start(self):
         self.hide()
         self.role_notice=RoleNotice(parent=self.parent)

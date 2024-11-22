@@ -15,9 +15,10 @@ class ZeroLayer(ShowBase):
         self.font=self.loader.loadFont('./fonts/Genjyuu.ttf')
         self.disableMouse()
         self.scene = self.loader.loadModel("models/world.bam")
-        self.scene.reparentTo(self.render)
-        self.scene.setScale(1.5, 1.5, 1.5)
-        self.scene.setPos(1, 4.0, -1)
+        if self.scene is not None:
+            self.scene.reparentTo(self.render)
+            self.scene.setScale(1.5, 1.5, 1.5)
+            self.scene.setPos(1, 4.0, -1)
         TextNode.setDefaultFont(self.font)
         self.scenes={
             "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu"), 
@@ -35,9 +36,10 @@ class ZeroLayer(ShowBase):
         self.cr=GameClientRepository(base=self)
     def onJoin(self):
         print("join!")
-        Player(self.cr, self)
+        self.player=Player(self.cr, self)
     def onEscape(self):
         print("exit!")
+        self.cr.disconnect()
         self.userExit()
     def changeScene(self, scene:str):
         if scene not in self.scenes:

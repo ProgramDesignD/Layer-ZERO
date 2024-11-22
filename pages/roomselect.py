@@ -1,13 +1,21 @@
 from direct.gui.DirectGui import *
 
+from repos.room import Room
+
 from .roomwait import RoomWait
 
 class RoomSelectItem(DirectFrame):
-    def __init__(self, text, parent=None, on_submit=None, **kw):
+    def __init__(self, text:str, value=None, parent=None, on_submit=None, **kw):
+        if value is None:
+            value=text
+        self.value=value
         super().__init__(parent, frameSize=(-1.0,1.0,-0.1,0.1),**kw)
         self.iconLabel=DirectLabel(parent=self, text="icon", text_scale=.1,pos=(-0.8,0,0),frameSize=(-0.2,0,-0.03,0.07))
-        self.nameButton=DirectButton(parent=self,text_scale=.1,text=text,frameSize=(-0.8,1.0,-0.03,0.07), borderWidth=(0.002,0.002),command=lambda: on_submit(text))
+        if on_submit is not None:
+            self.nameButton=DirectButton(parent=self,text_scale=.1,text=text,frameSize=(-0.8,1.0,-0.03,0.07), borderWidth=(0.002,0.002),command=lambda: on_submit(value))
         self.bounds=self["frameSize"]
+    def __hash__(self):
+        return self.value
 
 class RoomSelect(DirectFrame):
     def __init__(self, parent=None, on_leave=None, items=[], **kw):
@@ -54,12 +62,19 @@ class RoomSelect(DirectFrame):
             numItemsVisible=5,
             forceHeight=0.1
         )
+        self.accept("room_generated", self.on_add_room)
+        self.accept("room_deleted", self.on_remove_room)
+
         if len(items)==0:
-            for i in range(50):self.scroll_list.addItem(RoomSelectItem(str(i), on_submit=lambda v: self.on_select_room(v)))
+            for room_id, room in Room.rooms.items():
+                self.scroll_list.addItem(RoomSelectItem(str(room.name), value=room_id, on_submit=lambda v: self.on_select_room(v))) # type: ignore
+    def on_add_room(self, room:Room):
+        self.scroll_list.addItem(RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))) # type: ignore
+    def on_remove_room(self, room:Room):
+        self.scroll_list.removeItem(room.id)
     def on_select_room(self, roomid):
-        print(roomid)
         self.hide()
-        self.roomwait=RoomWait(parent=self.parent, on_leave=self.on_select_room_leave)
+        self.roomwait=RoomWait(room=Room.rooms[roomid], parent=self.parent, on_leave=self.on_select_room_leave)
     def on_select_room_leave(self):
         self.roomwait.hide()
         self.show()

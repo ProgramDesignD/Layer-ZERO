@@ -5,3 +5,15 @@ dclass DistributedSmoothActor: DistributedSmoothNode {
     loop(string animName) broadcast;
     pose(string animName, int16 frame) broadcast;
 }
+
+from repos.room import Room
+struct RoomModel {
+    uint64 id;
+    string name;
+    uint8 max_player;
+    uint8 is_visible;
+}
+
+dclass Room: DistributedObject {
+    setRoomModel(RoomModel room) broadcast required ram;
+}
