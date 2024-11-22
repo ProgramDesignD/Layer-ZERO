@@ -33,10 +33,10 @@ class GameClientRepository(ClientRepository):
         self.url = URLSpec('http://{}:{}'.format(hostname, tcpPort))
 
         # Attempt a connection to the server
-        self.connect([self.url],
+        self.connect([str(self.url)],
                      successCallback = self.connectSuccess,
                      failureCallback = self.connectFailure)
-
+        self.playerZone=None
     def lostConnection(self):
         """ This should be overridden by a derived class to handle an
         unexpectedly lost connection to the gameserver. """
@@ -102,4 +102,3 @@ class GameClientRepository(ClientRepository):
         self.setInterestZones([1, 2])
 
         self.base.messenger.send('client-joined')
-        print("Joined")

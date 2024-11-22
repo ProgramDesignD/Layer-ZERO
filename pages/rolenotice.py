@@ -19,7 +19,7 @@ class RoleNotice(DirectFrame):
             scale=0.08,
             fg=(1,0.5,0.5,1),
             align=TextNode.ALeft,
-            mayChange=1
+            mayChange=True
         )
 
         self.roletext = OnscreenText(
@@ -29,7 +29,7 @@ class RoleNotice(DirectFrame):
             scale=0.14,
             fg=(1, 0.5, 0.5, 1),
             align=TextNode.ACenter,
-            mayChange=1
+            mayChange=True
         )
 
         self.textObject2 = OnscreenText(
@@ -39,7 +39,7 @@ class RoleNotice(DirectFrame):
             scale=0.08,
             fg=(1,0.5,0.5,1),
             align=TextNode.ARight,
-            mayChange=1
+            mayChange=True
         )
     
         ShowBaseGlobal.base.taskMgr.doMethodLater(2, self.on_determinate_task, 'tickTask')

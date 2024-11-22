@@ -34,7 +34,7 @@ class AIRepository(ClientRepository):
         url = URLSpec('http://{}:{}'.format(hostname, tcpPort))
 
         # Attempt a connection to the server
-        self.connect([url],
+        self.connect([str(url)],
                      successCallback = self.connectSuccess,
                      failureCallback = self.connectFailure)
 
@@ -70,10 +70,9 @@ class AIRepository(ClientRepository):
         # the dc files passed to the repository earlier
         self.timeManager = self.createDistributedObject(
             className = 'TimeManagerAI', # The Name of the Class we want to initialize
-            zoneId = 1) # The Zone this Object will live in
+            zoneId = 1) # type: ignore # The Zone this Object will live in
 
         print("AI Repository Ready")
-
     def deallocateChannel(self, doID):
         """ This method will be called whenever a client disconnects from the
         server.  The given doID is the ID of the client who left us. """

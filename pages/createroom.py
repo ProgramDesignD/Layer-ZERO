@@ -1,7 +1,12 @@
+from string import ascii_letters
 from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from panda3d.core import TextNode
+from direct.showbase import ShowBaseGlobal
+from direct.distributed.ClientRepository import ClientRepository
+import random
 
+from repos.room import RoomModel, Room
 from .roomwait import RoomWait
 
 class CreateRoom(DirectFrame):
@@ -22,7 +27,7 @@ class CreateRoom(DirectFrame):
             scale=0.08,
             fg=(1, 0.5, 0.5, 1),
             align=TextNode.ARight,
-            mayChange=1
+            mayChange=True
         )
 
         self.players=3
@@ -119,8 +124,13 @@ class CreateRoom(DirectFrame):
             command=self.on_make_room
         )
     def on_make_room(self):
+        cr:ClientRepository=ShowBaseGlobal.base.cr # type: ignore
+        self.roomObj=Room(cr, RoomModel(id=None, name="".join(random.choices(ascii_letters, k=6)), max_player=self.players, is_visible=self.v[0]))
+        cr.createDistributedObject(distObj=self.roomObj,
+                                   zoneId=2)
         self.hide()
-        self.roomwait=RoomWait(parent=self.parent, on_leave=self.on_make_room_leave)
+        self.roomwait=RoomWait(room=self.roomObj, parent=self.parent, on_leave=self.on_make_room_leave)
     def on_make_room_leave(self):
+        self.roomObj.disableAnnounceAndDelete()
         self.roomwait.hide()
         self.show()

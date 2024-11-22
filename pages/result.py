@@ -2,8 +2,8 @@ from direct.gui.DirectGui import *
 from panda3d.core import TextNode
 
 class Result(DirectFrame):
-    def init(self, role: str, result: str, items: list, parent=None, on_leave=None, **kw):  # resultをゲームから受け取る
-        super().init(parent=parent, **kw)
+    def __init__(self, role: str, result: str, items: list, parent=None, on_leave=None, **kw):  # resultをゲームから受け取る
+        super().__init__(parent=parent, **kw)
 
         # 勝ち負けの表示
         if result == "win":
@@ -13,7 +13,6 @@ class Result(DirectFrame):
 
         self.result_label = DirectLabel(
             parent=self,
-            text_font=self.font,
             scale=0.2,
             pos=(0, 0, 0.5),
             text_align=TextNode.A_center

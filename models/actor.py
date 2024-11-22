@@ -7,7 +7,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
     def __init__(self, cr):
         Actor.__init__(self)
         DistributedSmoothNode.__init__(self, cr)
-        self.setCacheable(1)
+        self.setCacheable(True)
         self.setScale(0.1)
         self.ModelName=""
     def setModel(self, modelName:str):
