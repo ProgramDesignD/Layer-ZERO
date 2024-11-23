@@ -18,7 +18,7 @@ class RoomSelectItem(DirectFrame):
         return self.value
 
 class RoomSelect(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, items=[], **kw):
+    def __init__(self, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
         self.leave_btn = DirectButton(
             parent=self,
@@ -43,7 +43,6 @@ class RoomSelect(DirectFrame):
         )
         
         self.scroll_list=DirectScrolledList(
-            items=items,
             parent=self,
             decButton_pos=(0, 0, -0.65),
             decButton_text="Dec",
@@ -62,16 +61,15 @@ class RoomSelect(DirectFrame):
             numItemsVisible=5,
             forceHeight=0.1
         )
+        self.room_items={}
         self.accept("room_generated", self.on_add_room)
         self.accept("room_deleted", self.on_remove_room)
-
-        if len(items)==0:
-            for room_id, room in Room.rooms.items():
-                self.scroll_list.addItem(RoomSelectItem(str(room.name), value=room_id, on_submit=lambda v: self.on_select_room(v))) # type: ignore
     def on_add_room(self, room:Room):
-        self.scroll_list.addItem(RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))) # type: ignore
+        self.room_items[room.id]=RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))
+        self.scroll_list.addItem(self.room_items[room.id]) # type: ignore
     def on_remove_room(self, room:Room):
-        self.scroll_list.removeItem(room.id)
+        print("room_removed", room.id)
+        self.scroll_list.removeItem(self.room_items[room.id])
     def on_select_room(self, roomid):
         self.hide()
         self.roomwait=RoomWait(room=Room.rooms[roomid], parent=self.parent, on_leave=self.on_select_room_leave)

@@ -28,6 +28,8 @@ class Room(DistributedObject):
     def announceGenerate(self) -> None:
         ShowBaseGlobal.base.messenger.send("room_generated", [self])
         return super().announceGenerate()
+    def disable(self) -> None:
+        return super().disable()
     def delete(self):
         Room.rooms.pop(self.getDoId(), None)
         ShowBaseGlobal.base.messenger.send("room_deleted", [self])

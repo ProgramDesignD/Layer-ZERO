@@ -131,6 +131,6 @@ class CreateRoom(DirectFrame):
         self.hide()
         self.roomwait=RoomWait(room=self.roomObj, parent=self.parent, on_leave=self.on_make_room_leave)
     def on_make_room_leave(self):
-        self.roomObj.disableAnnounceAndDelete()
+        self.roomObj.sendDeleteMsg()
         self.roomwait.hide()
         self.show()
