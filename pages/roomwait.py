@@ -78,6 +78,7 @@ class RoomWait(DirectFrame):
         if len(items)==0:
             for i in range(10):self.scroll_list.addItem(RoomWaitItem(str(i))) # type: ignore
     def on_start(self):
+        ShowBaseGlobal.player.start() # type: ignore
         self.hide()
         self.role_notice=RoleNotice(parent=self.parent)
 
