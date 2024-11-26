@@ -1,7 +1,7 @@
 from typing import Dict
 from direct.distributed.DistributedObject import DistributedObject
 from direct.showbase import ShowBaseGlobal
-from models.player import Player
+from models.actor import DistributedSmoothActor
 
 class RoomModel:    
     def __init__(self, id, name, max_player, is_visible):
@@ -28,14 +28,20 @@ class Room(DistributedObject):
     def announceGenerate(self) -> None:
         ShowBaseGlobal.base.messenger.send("room_generated", [self])
         return super().announceGenerate()
-    def disable(self) -> None:
-        return super().disable()
     def delete(self):
         Room.rooms.pop(self.getDoId(), None)
         ShowBaseGlobal.base.messenger.send("room_deleted", [self])
         return super().delete()
-    def joinPlayer(self, player_id:Player):
-        pass
+    def joinPlayer(self, player_id:int):
+        if self.isLocal():
+            if self.max_player < len(self.players):
+                pass # playerChg event
+        else:
+            self.sendUpdate("joinPlayer", [player_id])
+    @property
+    def players(self):
+        doid=self.getDoId()
+        return self.cr.getObjectsOfClassInZone(parentId=doid, zoneId=doid, objClass=DistributedSmoothActor)
     @property
     def id(self):
         return self.roomModel.id

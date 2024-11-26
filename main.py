@@ -36,7 +36,6 @@ class ZeroLayer(ShowBase):
         self.cr=GameClientRepository(base=self)
     def onJoin(self):
         print("join!")
-        self.player=Player(self.cr, self)
     def onEscape(self):
         print("exit!")
         self.cr.disconnect()

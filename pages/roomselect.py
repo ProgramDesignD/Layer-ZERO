@@ -68,7 +68,9 @@ class RoomSelect(DirectFrame):
         self.room_items[room.id]=RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))
         self.scroll_list.addItem(self.room_items[room.id]) # type: ignore
     def on_remove_room(self, room:Room):
-        print("room_removed", room.id)
+        if room.id not in self.room_items:
+            print("warn: conflict room", room.id)
+            return
         self.scroll_list.removeItem(self.room_items[room.id])
     def on_select_room(self, roomid):
         self.hide()

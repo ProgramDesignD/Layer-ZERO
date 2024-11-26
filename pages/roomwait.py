@@ -1,5 +1,8 @@
 from direct.gui.DirectGui import *
+from direct.distributed.ClientRepository import ClientRepository
+from direct.showbase import ShowBaseGlobal
 
+from models.player import Player
 from .rolenotice import RoleNotice
 from repos.room import Room
 
@@ -15,7 +18,10 @@ class RoomWait(DirectFrame):
     def __init__(self, room:Room, parent=None, on_leave=None, items=[], **kw):
         super().__init__(parent, **kw)
         self.room=room
-        #self.room.joinPlayer()
+        cr: ClientRepository = ShowBaseGlobal.base.cr # type: ignore
+        ShowBaseGlobal.player = Player(cr, ShowBaseGlobal.base) # type: ignore
+        self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
+        ShowBaseGlobal.player.joinRoom(self.room.id) # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
@@ -40,13 +46,14 @@ class RoomWait(DirectFrame):
             scale=.2,
             pos=(0.5, 0, -0.1),
         )
-        self.submit_btn = DirectButton(
-            parent=self,
-            text="決定",
-            scale=.1,
-            pos=(1.0, 0, -0.8),
-            command=self.on_start
-        )
+        if self.room.isLocal():
+            self.submit_btn = DirectButton(
+                parent=self,
+                text="決定",
+                scale=.1,
+                pos=(1.0, 0, -0.8),
+                command=self.on_start
+            )
         
         self.scroll_list=DirectScrolledList(
             items=items,

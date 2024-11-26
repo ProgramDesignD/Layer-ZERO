@@ -46,12 +46,6 @@ class Player:
         self.base.accept('s-up', self.update_key_map, ["s", 0])
         self.base.accept('d-up', self.update_key_map, ["d", 0])
         
-        taskMgr.add(self.move, "moveTask")
-
-        self.ralph.setPos(self.position)
-
-        self.ralph.start()
-        
     def update_key_map(self, key_name, key_state):
         self.key_map[key_name] = key_state
 
@@ -110,3 +104,13 @@ class Player:
         self.ralph.setPos(self.position)
 
         return task.cont
+    
+    def start(self):
+        self.ralph.setPos(self.position)
+        taskMgr.add(self.move, "moveTask")
+        self.ralph.start()
+    def joinRoom(self, room_id:int):
+        self.ralph.setLocation(parentId=room_id, zoneId=room_id)
+    @property
+    def doId(self):
+        return self.ralph.getDoId()
