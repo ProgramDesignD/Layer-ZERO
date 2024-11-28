@@ -29,7 +29,7 @@ class RoomSelect(DirectFrame):
         )
         self.room_input = DirectEntry(
             parent=self,
-            command=lambda:self.on_select_room(self.room_input.get(plain=True)),
+            command=lambda _:self.on_select_room(self.roomName2Id(self.room_input.get(plain=True))),
             pos=(-0.5, 0, -0.75),
             text_scale=.1,
             frameSize=(0, 1.0, -0.1, 0.1)
@@ -39,7 +39,7 @@ class RoomSelect(DirectFrame):
             text="決定",
             scale=.1,
             pos=(1.0, 0, -0.8),
-            command=lambda: self.on_select_room(self.room_input.get(plain=True))
+            command=lambda: self.on_select_room(self.roomName2Id(self.room_input.get(plain=True)))
         )
         
         self.scroll_list=DirectScrolledList(
@@ -65,16 +65,24 @@ class RoomSelect(DirectFrame):
         self.accept("room_generated", self.on_add_room)
         self.accept("room_deleted", self.on_remove_room)
     def on_add_room(self, room:Room):
-        self.room_items[room.id]=RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))
-        self.scroll_list.addItem(self.room_items[room.id]) # type: ignore
+        if room.is_visible:
+            self.room_items[room.id]=RoomSelectItem(str(room.name), value=room.id, on_submit=lambda v: self.on_select_room(v))
+            self.scroll_list.addItem(self.room_items[room.id]) # type: ignore
     def on_remove_room(self, room:Room):
         if room.id not in self.room_items:
-            print("warn: conflict room", room.id)
+            print("warn: conflict or invisible room", room.id)
             return
         self.scroll_list.removeItem(self.room_items[room.id])
     def on_select_room(self, roomid):
-        self.hide()
-        self.roomwait=RoomWait(room=Room.rooms[roomid], parent=self.parent, on_leave=self.on_select_room_leave)
+        if roomid in Room.rooms:
+            self.hide()
+            self.roomwait=RoomWait(room=Room.rooms[roomid], parent=self.parent, on_leave=self.on_select_room_leave)
     def on_select_room_leave(self):
         self.roomwait.hide()
         self.show()
+    def roomName2Id(self, room_name):
+        for room in Room.rooms.values():
+            if room.name==room_name:
+                return room.id
+        else:
+            return None
