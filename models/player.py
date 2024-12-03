@@ -15,16 +15,16 @@ class Player:
     pitch_angular_velocity = 50
     max_pitch_angle = 30
     speed = 1
-    def __init__(self, cr:ClientRepository, base:ShowBase):
+    def __init__(self, cr:ClientRepository, base:ShowBase, room_id):
         self.cr = cr
         self.base=base
         self.ralph = DistributedSmoothActor(self.cr)
         self.ralph.setModel("sphere.bam")
         self.cr.createDistributedObject(
             distObj = self.ralph,
-            zoneId = 2)
+            zoneId = room_id)
         self.base.cam.setScale(0.8)
-
+        self.ralph.b_setLocation(parentId=room_id, zoneId=room_id)
         self.position = Point3(0, 0, 0)
         self.direction = VBase3(0, 0, 0)
         self.velocity = Vec3(0, 0, 0)
@@ -109,8 +109,6 @@ class Player:
         self.ralph.setPos(self.position)
         taskMgr.add(self.move, "moveTask")
         self.ralph.start()
-    def joinRoom(self, room_id:int):
-        self.ralph.setLocation(parentId=room_id, zoneId=room_id)
     @property
     def doId(self):
         return self.ralph.getDoId()

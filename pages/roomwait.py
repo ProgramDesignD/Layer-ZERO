@@ -15,13 +15,13 @@ class RoomWaitItem(DirectFrame):
 
 
 class RoomWait(DirectFrame):
-    def __init__(self, room:Room, parent=None, on_leave=None, items=[], **kw):
+    def __init__(self, room:Room, parent=None, on_leave=None, **kw):
         super().__init__(parent, **kw)
         self.room=room
+        self.on_leave=on_leave
         cr: ClientRepository = ShowBaseGlobal.base.cr # type: ignore
-        ShowBaseGlobal.player = Player(cr, ShowBaseGlobal.base) # type: ignore
-        self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
-        ShowBaseGlobal.player.joinRoom(self.room.id) # type: ignore
+        ShowBaseGlobal.player = Player(cr, ShowBaseGlobal.base, room_id=self.room.id) # type: ignore
+        #self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
@@ -56,7 +56,6 @@ class RoomWait(DirectFrame):
             )
         
         self.scroll_list=DirectScrolledList(
-            items=items,
             parent=self,
             decButton_pos=(0, 0, -0.65),
             decButton_text="Dec",
@@ -75,11 +74,20 @@ class RoomWait(DirectFrame):
             numItemsVisible=5,
             forceHeight=0.1
         )
-        if len(items)==0:
-            for i in range(10):self.scroll_list.addItem(RoomWaitItem(str(i))) # type: ignore
+        self.scroll_list.addItem(RoomWaitItem(str(ShowBaseGlobal.player.doId))) # type: ignore
+        self.accept("room_deleted", self.on_room_delete)
+        self.accept("player_update", self.on_player_update)
     def on_start(self):
         ShowBaseGlobal.player.start() # type: ignore
         self.hide()
         self.role_notice=RoleNotice(parent=self.parent)
-
-        
+    def on_room_delete(self, room:Room):
+        if room is self.room:
+            self.leave_btn.commandFunc(None)
+            self.ignore("room_deleted")
+    def on_player_update(self, room:Room):
+        if room is self.room:
+            self.scroll_list.removeAllItems()
+            print(room.id, [(p.getDoId(),p.getLocation()) for p in room.players.values()])
+            for player_id in room.players:
+                self.scroll_list.addItem(RoomWaitItem(str(player_id))) # type: ignore

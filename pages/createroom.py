@@ -100,7 +100,7 @@ class CreateRoom(DirectFrame):
                 parent=self,
                 text='公開',
                 variable=self.v,
-                value=[0],
+                value=[1],
                 scale=0.1,
                 pos=(-0.4,0,-0.5)
             ),
@@ -108,7 +108,7 @@ class CreateRoom(DirectFrame):
                 parent=self,
                 text='非公開',
                 variable=self.v,
-                value=[1],
+                value=[0],
                 scale=0.1,
                 pos=(0.4,0,-0.5)
             )

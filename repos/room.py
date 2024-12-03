@@ -12,9 +12,11 @@ class RoomModel:
 
 class Room(DistributedObject):
     rooms:Dict[int, "Room"]={}
+    players:Dict[int,"DistributedSmoothActor"]
     def __init__(self, cr, room:RoomModel=None): # type: ignore
         super().__init__(cr)
         self.roomModel=room
+        self.players={}
     def setRoomModel(self, room):
         self.roomModel=RoomModel(*room)
         self.roomModel.id=self.getDoId()
@@ -32,16 +34,14 @@ class Room(DistributedObject):
         Room.rooms.pop(self.getDoId(), None)
         ShowBaseGlobal.base.messenger.send("room_deleted", [self])
         return super().delete()
-    def joinPlayer(self, player_id:int):
-        if self.isLocal():
-            if self.max_player < len(self.players):
-                pass # playerChg event
-        else:
-            self.sendUpdate("joinPlayer", [player_id])
-    @property
-    def players(self):
-        doid=self.getDoId()
-        return self.cr.getObjectsOfClassInZone(parentId=doid, zoneId=doid, objClass=DistributedSmoothActor)
+    def onPlayerUpdate(self, player_id:int):
+        player:DistributedSmoothActor|None=self.cr.getDo(player_id) # type: ignore
+        if player is not None:
+            self.players[player_id]=player
+            ShowBaseGlobal.base.messenger.send("player_update", [self])
+    def handleChildArriveZone(self, childObj, zoneId) -> None:
+        print(childObj, zoneId)
+        return super().handleChildArriveZone(childObj, zoneId)
     @property
     def id(self):
         return self.roomModel.id

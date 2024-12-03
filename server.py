@@ -1,5 +1,5 @@
 from direct.distributed.ServerRepository import ServerRepository
-from panda3d.core import ConfigVariableInt
+from panda3d.core import ConfigVariableInt, DatagramIterator, NetDatagram
 
 from repos.ai import AIRepository
 
