@@ -74,9 +74,12 @@ class RoomSelect(DirectFrame):
             return
         self.scroll_list.removeItem(self.room_items[room.id])
     def on_select_room(self, roomid):
+        room=Room.rooms[roomid]
         if roomid in Room.rooms:
+            if room.max_player <= len(room.players):
+                return
             self.hide()
-            self.roomwait=RoomWait(room=Room.rooms[roomid], parent=self.parent, on_leave=self.on_select_room_leave)
+            self.roomwait=RoomWait(room=room, parent=self.parent, on_leave=self.on_select_room_leave)
     def on_select_room_leave(self):
         self.roomwait.hide()
         self.show()

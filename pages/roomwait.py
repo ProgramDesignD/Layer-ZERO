@@ -21,7 +21,7 @@ class RoomWait(DirectFrame):
         self.on_leave=on_leave
         cr: ClientRepository = ShowBaseGlobal.base.cr # type: ignore
         ShowBaseGlobal.player = Player(cr, ShowBaseGlobal.base, room_id=self.room.id) # type: ignore
-        #self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
+        self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
@@ -52,7 +52,7 @@ class RoomWait(DirectFrame):
                 text="決定",
                 scale=.1,
                 pos=(1.0, 0, -0.8),
-                command=self.on_start
+                command=self.on_start_button
             )
         
         self.scroll_list=DirectScrolledList(
@@ -77,17 +77,20 @@ class RoomWait(DirectFrame):
         self.scroll_list.addItem(RoomWaitItem(str(ShowBaseGlobal.player.doId))) # type: ignore
         self.accept("room_deleted", self.on_room_delete)
         self.accept("player_update", self.on_player_update)
-    def on_start(self):
+        self.accept("game_start", self.on_start)
+    def on_start_button(self):
+        self.room.start()
+    def on_start(self, room:Room):
         ShowBaseGlobal.player.start() # type: ignore
         self.hide()
         self.role_notice=RoleNotice(parent=self.parent)
     def on_room_delete(self, room:Room):
         if room is self.room:
             self.leave_btn.commandFunc(None)
-            self.ignore("room_deleted")
+            #self.ignore("room_deleted")
     def on_player_update(self, room:Room):
         if room is self.room:
             self.scroll_list.removeAllItems()
-            print(room.id, [(p.getDoId(),p.getLocation()) for p in room.players.values()])
+            #print(room.id, [(p.getDoId(),p.getLocation()) for p in room.players.values()])
             for player_id in room.players:
                 self.scroll_list.addItem(RoomWaitItem(str(player_id))) # type: ignore

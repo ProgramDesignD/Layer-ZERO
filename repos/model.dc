@@ -17,5 +17,7 @@ struct RoomModel {
 dclass Room: DistributedObject {
     setRoomModel(RoomModel room) broadcast required ram;
     joinPlayer(uint64 player_id) p2p;
-    onPlayerUpdate(uint64 player_id) broadcast;
+    leavePlayer(uint64 player_id) p2p;
+    onPlayerUpdate(uint64[] player_id) broadcast;
+    onGameStart() broadcast;
 }

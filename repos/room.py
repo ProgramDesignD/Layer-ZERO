@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from direct.distributed.DistributedObject import DistributedObject
 from direct.showbase import ShowBaseGlobal
 from models.actor import DistributedSmoothActor
@@ -34,14 +34,33 @@ class Room(DistributedObject):
         Room.rooms.pop(self.getDoId(), None)
         ShowBaseGlobal.base.messenger.send("room_deleted", [self])
         return super().delete()
-    def onPlayerUpdate(self, player_id:int):
-        player:DistributedSmoothActor|None=self.cr.getDo(player_id) # type: ignore
-        if player is not None:
-            self.players[player_id]=player
-            ShowBaseGlobal.base.messenger.send("player_update", [self])
-    def handleChildArriveZone(self, childObj, zoneId) -> None:
-        print(childObj, zoneId)
-        return super().handleChildArriveZone(childObj, zoneId)
+    def onPlayerUpdate(self, player_ids:List[int]):
+        self.players.clear()
+        for player_id in player_ids:
+            player:DistributedSmoothActor|None=self.cr.getDo(player_id) # type: ignore
+            if player is not None:
+                self.players[player_id]=player
+        ShowBaseGlobal.base.messenger.send("player_update", [self])
+    def joinPlayer(self, player_id):
+        if self.isLocal():
+            self.sendUpdate("onPlayerUpdate", [[player_id, *self.players.keys()]])
+            self.onPlayerUpdate([player_id, *self.players.keys()])
+        else:
+            self.sendUpdate("joinPlayer", [player_id])
+    def leavePlayer(self, player_id):
+        if self.isLocal():
+            players=self.players.copy()
+            players.pop(player_id)
+            self.sendUpdate("onPlayerUpdate", [list(players.keys())])
+            self.onPlayerUpdate(list(players.keys()))
+        else:
+            self.sendUpdate("joinPlayer", [player_id])
+    def start(self):
+        if self.isLocal():
+            self.sendUpdate("onGameStart")
+            ShowBaseGlobal.base.messenger.send("game_start", [self])
+    def onGameStart(self):
+        ShowBaseGlobal.base.messenger.send("game_start", [self])
     @property
     def id(self):
         return self.roomModel.id
