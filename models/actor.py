@@ -1,7 +1,11 @@
+import queue
+from tkinter import Entry
 from direct.distributed.DistributedSmoothNode import DistributedSmoothNode
 from direct.showbase import ShowBaseGlobal
 
 from direct.actor.Actor import Actor
+
+from panda3d.core import *
 
 class DistributedSmoothActor(DistributedSmoothNode, Actor):
     def __init__(self, cr):
@@ -10,6 +14,37 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         self.setCacheable(True)
         self.setScale(0.1)
         self.ModelName=""
+
+        # 衝突検知オブジェクト
+        ShowBaseGlobal.base.cTrav = CollisionTraverser( "traverser" )
+        ShowBaseGlobal.base.cTrav.showCollisions( ShowBaseGlobal.base.render )
+        
+        # 衝突検知モデル
+        self.collmodel= CollisionNode("collision")
+        self.collmodel.addSolid(CollisionSphere(0, 0, 0, 5))
+        self.coll = self.attachNewNode( self.collmodel )
+        self.coll.show()
+
+        handlerevent = CollisionHandlerEvent()
+        # 上から衝突時、衝突中、衝突解除
+        handlerevent.addInPattern('%fn-into-%in')
+        handlerevent.addAgainPattern('%fn-again-%in')
+        handlerevent.addOutPattern('%fn-out-%in')
+
+        # イベントに対するハンドラ関数の登録
+        self.accept( "collision-into-collision", self.collisionhandler )
+        self.accept( "collision-out-collision", self.separatehandler )
+        ShowBaseGlobal.base.cTrav.addCollider( self.coll,  handlerevent) # type: ignore
+        ShowBaseGlobal.base.cTrav.traverse(ShowBaseGlobal.base.render) # type: ignore
+
+    # ハンドラ関数の定義
+    def collisionhandler(self,  entry ): 
+        print ("aaaaaa", entry)
+    def separatehandler(self, entry ): 
+        print ("aaaaaa", entry)
+
+
+
     def setModel(self, modelName:str):
         Actor.loadModel(self, "models/"+modelName)
         self.ModelName=modelName
