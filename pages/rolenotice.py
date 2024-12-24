@@ -6,10 +6,9 @@ from .cardchoice import CardChoice
 from direct.showbase import ShowBaseGlobal
 
 class RoleNotice(DirectFrame):
-    def __init__(self, parent=None, on_leave=None, **kw):
+    roles = {0:"実行犯", 1:"共犯", 2:"内通者", 3:"警備員", 4:"社員"}
+    def __init__(self, parent=None, on_leave=None, roleName="", **kw):
         super().__init__(parent, **kw)
-
-        self.roles = {0:"実行犯", 1:"共犯", 2:"内通者", 3:"警備員", 4:"社員"}
         self.role_num = 0
 
         self.textObject = OnscreenText(
@@ -24,7 +23,7 @@ class RoleNotice(DirectFrame):
 
         self.roletext = OnscreenText(
             parent=self,
-            text=self.roles[self.role_num],
+            text=ShowBaseGlobal.base.player.role, # type: ignore
             pos=(0,0),
             scale=0.14,
             fg=(1, 0.5, 0.5, 1),

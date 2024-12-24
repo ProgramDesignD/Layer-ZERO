@@ -1,7 +1,9 @@
+import random
 from typing import Dict, List
 from direct.distributed.DistributedObject import DistributedObject
 from direct.showbase import ShowBaseGlobal
 from models.actor import DistributedSmoothActor
+from pages.rolenotice import RoleNotice
 
 class RoomModel:    
     def __init__(self, id, name, max_player, is_visible):
@@ -17,6 +19,7 @@ class Room(DistributedObject):
         super().__init__(cr)
         self.roomModel=room
         self.players={}
+        self.is_started=0
     def setRoomModel(self, room):
         self.roomModel=RoomModel(*room)
         self.roomModel.id=self.getDoId()
@@ -54,13 +57,22 @@ class Room(DistributedObject):
             self.sendUpdate("onPlayerUpdate", [list(players.keys())])
             self.onPlayerUpdate(list(players.keys()))
         else:
-            self.sendUpdate("joinPlayer", [player_id])
+            self.sendUpdate("leavePlayer", [player_id])
     def start(self):
         if self.isLocal():
             self.sendUpdate("onGameStart")
-            ShowBaseGlobal.base.messenger.send("game_start", [self])
+            players=list(self.players.values())
+            for role in RoleNotice.roles.values():
+                if len(players)<=0:
+                    break
+                player=random.choice(players)
+                players.remove(player)
+                player.sendRole(role)
+            #ShowBaseGlobal.base.messenger.send("game_start", [self])
     def onGameStart(self):
-        ShowBaseGlobal.base.messenger.send("game_start", [self])
+        self.is_started=True
+        self.cr.setInterestZones([1, self.id])
+        #ShowBaseGlobal.base.messenger.send("game_start", [self])
     @property
     def id(self):
         return self.roomModel.id

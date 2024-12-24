@@ -20,14 +20,14 @@ class RoomWait(DirectFrame):
         self.room=room
         self.on_leave=on_leave
         cr: ClientRepository = ShowBaseGlobal.base.cr # type: ignore
-        ShowBaseGlobal.player = Player(cr, ShowBaseGlobal.base, room_id=self.room.id) # type: ignore
-        self.room.joinPlayer(ShowBaseGlobal.player.doId) # type: ignore
+        ShowBaseGlobal.base.player = Player(cr, ShowBaseGlobal.base, room_id=self.room.id) # type: ignore
+        self.room.joinPlayer(ShowBaseGlobal.base.player.doId) # type: ignore
         self.leave_btn = DirectButton(
             parent=self,
             text="戻る",
             scale=.1,
             pos=(-1.0, 0, -0.8),
-            command=on_leave
+            command=self.on_leave_button
         )
         self.room_label_frame=DirectFrame(
             parent=self,
@@ -74,19 +74,24 @@ class RoomWait(DirectFrame):
             numItemsVisible=5,
             forceHeight=0.1
         )
-        self.scroll_list.addItem(RoomWaitItem(str(ShowBaseGlobal.player.doId))) # type: ignore
+        self.scroll_list.addItem(RoomWaitItem(str(ShowBaseGlobal.base.player.doId))) # type: ignore
         self.accept("room_deleted", self.on_room_delete)
         self.accept("player_update", self.on_player_update)
-        self.accept("game_start", self.on_start)
+        self.accept("role_changed", self.on_role_changed)
     def on_start_button(self):
         self.room.start()
-    def on_start(self, room:Room):
-        ShowBaseGlobal.player.start() # type: ignore
-        self.hide()
-        self.role_notice=RoleNotice(parent=self.parent)
+    def on_leave_button(self):
+        self.room.leavePlayer(ShowBaseGlobal.base.player.doId) # type: ignore
+        ShowBaseGlobal.base.player.delete() # type: ignore
+        self.on_leave() # type: ignore
+    def on_role_changed(self, player, roleName):
+        #ShowBaseGlobal.base.player.start() # type: ignore
+        if player.isLocal(): # type: ignore
+            self.hide()
+            self.role_notice=RoleNotice(parent=self.parent, roleName=roleName)
     def on_room_delete(self, room:Room):
-        if room is self.room:
-            self.leave_btn.commandFunc(None)
+        if room is self.room and not room.is_started:
+            self.on_leave() # type: ignore
             #self.ignore("room_deleted")
     def on_player_update(self, room:Room):
         if room is self.room:

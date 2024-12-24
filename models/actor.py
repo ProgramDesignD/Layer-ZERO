@@ -14,6 +14,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         self.setCacheable(True)
         self.setScale(0.1)
         self.ModelName=""
+        self.role=None
 
         # 衝突検知オブジェクト
         ShowBaseGlobal.base.cTrav = CollisionTraverser( "traverser" )
@@ -43,8 +44,6 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
     def separatehandler(self, entry ): 
         print ("aaaaaa", entry)
 
-
-
     def setModel(self, modelName:str):
         Actor.loadModel(self, "models/"+modelName)
         self.ModelName=modelName
@@ -71,6 +70,8 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
             self.DistributedActor_deleted
         except:
             self.DistributedActor_deleted = 1
+            self.stopPosHprBroadcast()
+            DistributedSmoothNode.sendDeleteMsg(self)
             DistributedSmoothNode.delete(self)
             Actor.delete(self)
 
@@ -78,11 +79,17 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         # Let the DistributedSmoothNode take care of broadcasting the
         # position updates several times a second.
         self.startPosHprBroadcast()
-
+    def onRoleChanged(self, roleName:str):
+        self.role=roleName
+        ShowBaseGlobal.base.messenger.send("role_changed", [self, roleName])
+        if self.isLocal():
+            self.start()
+    def sendRole(self, roleName:str):
+        self.sendUpdate("onRoleChanged", [roleName,])
+        self.onRoleChanged(roleName)
     def loop(self, animName):
         self.sendUpdate("loop", [animName])
         return Actor.loop(self, animName)
-
     def pose(self, animName, frame):
         self.sendUpdate("pose", [animName, frame])
         return Actor.pose(self, animName, frame)

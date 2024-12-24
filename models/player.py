@@ -24,7 +24,7 @@ class Player:
             distObj = self.ralph,
             zoneId = room_id)
         self.base.cam.setScale(0.8)
-        self.ralph.b_setLocation(parentId=room_id, zoneId=room_id)
+        #self.ralph.b_setLocation(parentId=room_id, zoneId=room_id)
         self.position = Point3(0, 0, 0)
         self.direction = VBase3(0, 0, 0)
         self.velocity = Vec3(0, 0, 0)
@@ -104,11 +104,15 @@ class Player:
         self.ralph.setPos(self.position)
 
         return task.cont
-    
     def start(self):
         self.ralph.setPos(self.position)
         taskMgr.add(self.move, "moveTask")
         self.ralph.start()
+    def delete(self):
+        self.ralph.delete()
     @property
     def doId(self):
         return self.ralph.getDoId()
+    @property
+    def role(self):
+        return self.ralph.role
