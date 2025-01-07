@@ -41,9 +41,13 @@ class RoleNotice(DirectFrame):
             mayChange=True
         )
     
-        ShowBaseGlobal.base.taskMgr.doMethodLater(2, self.on_determinate_task, 'tickTask')
+        ShowBaseGlobal.base.taskMgr.doMethodLater(2, self.on_two_seconds_later, 'tickTask')
 
-    def on_determinate_task(self, task):
+    def on_two_seconds_later(self, task):
         self.hide()
-        self.makedeck=CardChoice(parent=self.parent ,role_num=self.role_num)
+        self.makedeck=CardChoice(parent=self.parent ,role_num=self.role_num, command=self.on_cardchoice_done)
         return task.done
+    
+    def on_cardchoice_done(self):
+        self.makedeck.hide()
+        ShowBaseGlobal.base.player.start() # type: ignore

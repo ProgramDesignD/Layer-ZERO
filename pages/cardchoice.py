@@ -41,7 +41,7 @@ with open('deck.json',encoding='utf-8') as f:
 
 
 class CardChoice(DirectFrame):
-    def __init__(self, role_num:int, parent=None, **kw):
+    def __init__(self, role_num:int, parent=None, command=None, **kw):
         super().__init__(parent, **kw)
 
         role= role_list[role_num]
@@ -108,7 +108,8 @@ class CardChoice(DirectFrame):
         self.leave_btn = DirectButton(parent=self,
                                         text="決定",
                                         scale=.1,
-                                        pos=(-1.0, 0, 0.85))
+                                        pos=(-1.0, 0, 0.85),
+                                        command=command)
 
 
 # 枠
