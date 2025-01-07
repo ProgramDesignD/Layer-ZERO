@@ -6,7 +6,7 @@ from .cardchoice import CardChoice
 from direct.showbase import ShowBaseGlobal
 
 class RoleNotice(DirectFrame):
-    roles = {0:"実行犯", 1:"共犯", 2:"内通者", 3:"警備員", 4:"社員"}
+    roles = {0:"実行犯", 1:"警備員", 2:"共犯", 3:"社員", 4:"内通者"}
     def __init__(self, parent=None, on_leave=None, roleName="", **kw):
         super().__init__(parent, **kw)
         self.role_num = 0
