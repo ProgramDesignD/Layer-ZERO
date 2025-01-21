@@ -8,6 +8,7 @@ from direct.actor.Actor import Actor
 from panda3d.core import *
 
 class DistributedSmoothActor(DistributedSmoothNode, Actor):
+    actors=[]
     def __init__(self, cr):
         Actor.__init__(self)
         DistributedSmoothNode.__init__(self, cr)
@@ -15,6 +16,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         self.setScale(0.1)
         self.ModelName=""
         self.role=None
+        DistributedSmoothActor.actors.append(self)
 
         # 衝突検知オブジェクト
         ShowBaseGlobal.base.cTrav = CollisionTraverser( "traverser" )
@@ -22,6 +24,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         
         # 衝突検知モデル
         self.collmodel= CollisionNode("collision")
+        self.collmodel.setTag("actor_id", str(id(self)))
         self.collmodel.addSolid(CollisionSphere(0, 0, 0, 5))
         self.coll = self.attachNewNode( self.collmodel )
         self.coll.show()
@@ -38,14 +41,32 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         ShowBaseGlobal.base.cTrav.addCollider( self.coll,  handlerevent) # type: ignore
         ShowBaseGlobal.base.cTrav.traverse(ShowBaseGlobal.base.render) # type: ignore
 
+
+        # pusher = CollisionHandlerPusher()
+        # pusher.addCollider(self.coll, self)
+
     # ハンドラ関数の定義
-    def collisionhandler(self,  entry ): 
-        print ("aaaaaa", entry)
+    def collisionhandler(self,  entry): 
+        # if self.isLocal():
+            print("entry", entry.getIntoNode().getTag("actor_id"))
+            for actor in DistributedSmoothActor.actors:
+                if id(actor) == int(entry.getIntoNode().getTag("actor_id")):
+                    break
+            else:
+                raise
+            intoActor=actor
+            print(self.role)
+            print(intoActor.role)
+        
+        # if(self.role == ):
+        #    print("逮捕")
+        #     とりまリザルトに飛ばしたい
     def separatehandler(self, entry ): 
         print ("aaaaaa", entry)
 
     def setModel(self, modelName:str):
         Actor.loadModel(self, "models/"+modelName)
+        self.player=Actor.loadModel(self, "models/"+modelName)
         self.ModelName=modelName
     def getModel(self):
         return self.ModelName
@@ -82,6 +103,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
     def onRoleChanged(self, roleName:str):
         self.role=roleName
         ShowBaseGlobal.base.messenger.send("role_changed", [self, roleName])
+        self.coll.setName(roleName)
         if self.isLocal():
             self.start()
     def sendRole(self, roleName:str):
