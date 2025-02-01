@@ -20,6 +20,8 @@ class ZeroLayer(ShowBase):
             self.scene.setScale(1.5, 1.5, 1.5)
             self.scene.setPos(1, 4.0, -1)
             self.scene.setTwoSided(True)
+            # self.scene.setShaderAuto()
+        self.camLens.setNear(0.05)
         TextNode.setDefaultFont(self.font)
         self.scenes={
             "topmenu": TopMenu(parent=self.aspect2d, on_start=lambda: self.changeScene("roommenu"), 
