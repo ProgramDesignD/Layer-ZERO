@@ -8,6 +8,7 @@ from direct.actor.Actor import Actor
 from panda3d.core import *
 
 class DistributedSmoothActor(DistributedSmoothNode, Actor):
+    actors={}
     def __init__(self, cr):
         Actor.__init__(self)
         DistributedSmoothNode.__init__(self, cr)
@@ -15,7 +16,6 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         self.setScale(0.1)
         self.ModelName=""
         self.role=None
-
         # 衝突検知オブジェクト
         ShowBaseGlobal.base.cTrav = CollisionTraverser( "traverser" )
         ShowBaseGlobal.base.cTrav.showCollisions( ShowBaseGlobal.base.render )
@@ -23,6 +23,7 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         # 衝突検知モデル
         self.collmodel= CollisionNode("collision")
         self.collmodel.addSolid(CollisionSphere(0, 0, 0, 5))
+        self.collmodel.setTag("actor_id", str(id(self)))
         self.coll = self.attachNewNode( self.collmodel )
         self.coll.show()
 
@@ -37,10 +38,23 @@ class DistributedSmoothActor(DistributedSmoothNode, Actor):
         self.accept( "collision-out-collision", self.separatehandler )
         ShowBaseGlobal.base.cTrav.addCollider( self.coll,  handlerevent) # type: ignore
         ShowBaseGlobal.base.cTrav.traverse(ShowBaseGlobal.base.render) # type: ignore
+        DistributedSmoothActor.actors[str(id(self))]=self
 
     # ハンドラ関数の定義
     def collisionhandler(self,  entry ): 
-        print ("aaaaaa", entry)
+        from_node=DistributedSmoothActor.actors.get(entry.getFromNode().getTag("actor_id"), None)
+        into_node=DistributedSmoothActor.actors.get(entry.getIntoNode().getTag("actor_id"), None)
+        from_role=getattr(from_node, "role", None)
+        into_role=getattr(into_node, "role", None)
+        print(from_role, into_role)
+        if from_role in ["実行犯","共犯","内通者"] and into_role in ["警備員", "会社員"]:
+            print("lose")
+            ShowBaseGlobal.base.messenger.send("result", [False])
+            
+        elif into_role in ["実行犯","共犯","内通者"] and from_role in ["警備員", "会社員"]:
+            print("win")
+            ShowBaseGlobal.base.messenger.send("result", [True])
+            
     def separatehandler(self, entry ): 
         print ("aaaaaa", entry)
 

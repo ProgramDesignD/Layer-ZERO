@@ -2,6 +2,8 @@ from direct.gui.DirectGui import *
 from direct.gui.OnscreenText import OnscreenText
 from direct.task import Task
 from panda3d.core import TextNode
+
+from pages.result import Result
 from .cardchoice import CardChoice
 from direct.showbase import ShowBaseGlobal
 
@@ -42,6 +44,7 @@ class RoleNotice(DirectFrame):
         )
     
         ShowBaseGlobal.base.taskMgr.doMethodLater(2, self.on_two_seconds_later, 'tickTask')
+        self.accept("result", self.on_result)
 
     def on_two_seconds_later(self, task):
         self.hide()
@@ -51,3 +54,6 @@ class RoleNotice(DirectFrame):
     def on_cardchoice_done(self):
         self.makedeck.hide()
         ShowBaseGlobal.base.player.start() # type: ignore
+    
+    def on_result(self, result):
+        self.result=Result("win" if result else "lose", [], self.parent)
