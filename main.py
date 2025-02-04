@@ -18,7 +18,7 @@ class ZeroLayer(ShowBase):
         if self.scene is not None:
             self.scene.reparentTo(self.render)
             self.scene.setScale(1.5, 1.5, 1.5)
-            self.scene.setPos(1, 4.0, -1)
+            self.scene.setPos(1, 3.3, -1)
             self.scene.setTwoSided(True)
             # self.scene.setShaderAuto()
         self.camLens.setNear(0.05)
