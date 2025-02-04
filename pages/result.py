@@ -15,7 +15,8 @@ class Result(DirectFrame):
             parent=self,
             scale=0.2,
             pos=(0, 0, 0.5),
-            text_align=TextNode.A_center
+            text_align=TextNode.A_center,
+            text=result_text
         )
 
         # 獲得アイテムの表示        
